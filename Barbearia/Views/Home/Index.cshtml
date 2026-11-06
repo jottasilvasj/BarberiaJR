@@ -1,0 +1,211 @@
+﻿@model Barbearia.ViewModels.HomeViewModel
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ryan Barber - O Barbeiro dos Brutos</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <style>
+            :root {
+                --cinza-fundo: #212529;
+                --cinza-card: #2c3034;
+                --cinza-borda: #495057;
+                --azul-principal: #0d6efd;
+                --azul-hover: #0b5ed7;
+                --texto-principal: #ffffff;
+                --texto-secundario: #ced4da;
+            }
+
+            body {
+                background-color: var(--cinza-fundo);
+                color: var(--texto-principal);
+                font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+            }
+
+            h1, h3, h4, h5, label {
+                color: var(--texto-principal) !important;
+            }
+
+            .text-azul {
+                color: var(--azul-principal) !important;
+            }
+
+            .text-mutado {
+                color: var(--texto-secundario) !important;
+            }
+
+            /* Efeito do Link do Instagram */
+            .link-insta {
+                color: var(--texto-secundario);
+                font-size: 1.1rem;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+                .link-insta:hover {
+                    color: #E1306C; /* Cor oficial do Instagram */
+                }
+
+            .card-servico {
+                background-color: var(--cinza-card);
+                border: 1px solid var(--cinza-borda);
+                border-left: 4px solid var(--azul-principal);
+                border-radius: 8px;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+                .card-servico:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 15px rgba(13, 110, 253, 0.15);
+                    border-left-color: var(--azul-hover);
+                }
+
+            .preco-azul {
+                color: var(--azul-principal);
+                font-weight: 800;
+                font-size: 1.1rem;
+            }
+
+            .form-card {
+                background-color: var(--cinza-card);
+                border: 1px solid var(--cinza-borda);
+                border-radius: 12px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .form-control, .form-select {
+                background-color: var(--cinza-fundo) !important;
+                border: 1px solid var(--cinza-borda) !important;
+                color: var(--texto-principal) !important;
+            }
+
+                .form-control:focus, .form-select:focus {
+                    border-color: var(--azul-principal) !important;
+                    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+                }
+
+                .form-control::placeholder {
+                    color: #6c757d !important;
+                }
+
+            .btn-azul {
+                background-color: var(--azul-principal);
+                border-color: var(--azul-principal);
+                color: #fff;
+                transition: all 0.3s ease;
+            }
+
+                .btn-azul:hover {
+                    background-color: var(--azul-hover);
+                    border-color: var(--azul-hover);
+                    color: #fff;
+                    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+                }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+
+        <div class="row mb-5 align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold">Ryan Barber</h1>
+                <p class="lead text-mutado mb-2">Barbearia JR Cortes. Estilo, tradição e os melhores cortes da região.</p>
+
+                <!-- Link do Instagram -->
+                <a href="https://www.instagram.com/ryanbarber3.3/" target="_blank" class="link-insta d-inline-block mt-2">
+                    <i class="fab fa-instagram fa-lg me-2"></i>Siga no Instagram
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Listagem Dinâmica dos Serviços vindos da BD -->
+            <div class="col-md-7">
+                <h3 class="fw-bold mb-4">Nossos Serviços</h3>
+                <div class="row g-3">
+                    @if (Model?.ListaServicos != null)
+                    {
+                        @foreach (var servico in Model.ListaServicos)
+                        {
+                            <div class="col-md-6">
+                                <div class="card h-100 card-servico">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="@(string.IsNullOrEmpty(servico.IconeCss) ? "fas fa-cut" : servico.IconeCss) fa-2x text-azul me-3"></i>
+                                            <h5 class="card-title mb-0 fw-bold">@servico.Nome</h5>
+                                        </div>
+                                        <p class="card-text text-mutado small">@servico.Descricao</p>
+                                        <h6 class="preco-azul mb-0">R$ @servico.Preco.ToString("F2")</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Formulário de Agendamento -->
+            <div class="col-md-5">
+                <div class="card form-card">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-4 text-azul"><i class="far fa-calendar-alt me-2"></i>Faça seu Agendamento</h4>
+
+                        <form id="formAgendamento" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <div class="mb-3">
+                                <label class="form-label">Seu Nome</label>
+                                <input type="text" name="NomeCliente" class="form-control" placeholder="Digite seu nome" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">WhatsApp / Telefone</label>
+                                <input type="tel" name="Telefone" class="form-control" placeholder="(11) 99999-9999" required />
+                            </div>
+
+                            <!-- Dropdown Dinâmico puxado da Base de Dados -->
+                            <div class="mb-3">
+                                <label class="form-label">Serviço</label>
+                                <select name="ServicoId" class="form-select" required>
+                                    <option value="">Selecione um serviço...</option>
+                                    @if (Model?.ListaServicos != null)
+                                    {
+                                        @foreach (var servico in Model.ListaServicos)
+                                        {
+                                            <option value="@servico.Id">@servico.Nome - R$ @servico.Preco.ToString("F2")</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Data e Horário</label>
+                                <input type="datetime-local" name="DataHora" class="form-control" required />
+                            </div>
+
+                            <button type="submit" class="btn btn-azul w-100 fw-bold py-2 mt-3">
+                                <i class="fab fa-whatsapp me-2"></i>Agendar pelo WhatsApp
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/script.js"></script>
+</body>
+</html>
