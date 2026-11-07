@@ -87,6 +87,7 @@
                 background-color: var(--cinza-fundo) !important;
                 border: 1px solid var(--cinza-borda) !important;
                 color: var(--texto-principal) !important;
+                color-scheme: dark; /* deixa o ícone do calendário visível no tema escuro */
             }
 
                 .form-control:focus, .form-select:focus {
@@ -147,6 +148,12 @@
                                         </div>
                                         <p class="card-text text-mutado small">@servico.Descricao</p>
                                         <h6 class="preco-azul mb-0">R$ @servico.Preco.ToString("F2")</h6>
+                                        @if (servico.DuracaoMinutos > 0)
+                                        {
+                                            <small class="text-mutado d-block mt-1">
+                                                <i class="far fa-clock me-1"></i>@servico.DuracaoMinutos min
+                                            </small>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -189,8 +196,9 @@
                                 </select>
                             </div>
 
+                            <!-- O script.js troca este campo por um calendário (dia) + lista de horários -->
                             <div class="mb-3">
-                                <label class="form-label">Data e Horário</label>
+                                <label class="form-label">Dia e Horário</label>
                                 <input type="datetime-local" name="DataHora" class="form-control" required />
                             </div>
 

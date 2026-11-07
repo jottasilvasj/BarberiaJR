@@ -1,0 +1,23 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: 267117
+      MYSQL_DATABASE: dbarbearia
+    ports:
+      - "3307:3306"
+    volumes:
+      - dados-mysql:/var/lib/mysql
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=db;Port=3306;Database=dbarbearia;Uid=root;Pwd=267117;"
+    depends_on:
+      - db
+
+volumes:
+  dados-mysql:
